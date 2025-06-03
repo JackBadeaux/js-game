@@ -25,3 +25,8 @@ main,body,html {
 .hero-choice:active{
   scale: 1;
 }
+.player-info p {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+}
