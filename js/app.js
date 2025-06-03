@@ -16,12 +16,20 @@ const rogue = {
     dmg: 20,
     defence: 0,
 }
-debugger
+const player = {} 
 const heroButton = document.querySelectorAll(".hero-choice")
 
 heroButton.forEach(button => {
     button.addEventListener("click", () => {
-        console.log("clicked button", button.id);
-        
+ if(button.id === "mage"){
+    Object.assign(player,mage)
+ } else if (button.id === "warrior"){
+    Object.assign(player, warrior)
+ } else if (button.id === "rogue"){
+    Object.assign(player,rogue)
+ };
+console.log(player);
+
+ 
     });
 });
