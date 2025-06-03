@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+.roboto {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+main,body,html {
+  background-color: grey;
+  height: 100%;
+}
+.pick-hero-div{
+  display: flex;
+  justify-content: space-evenly;
+}
+.hero-choice{
+  border: none;
+  transition: scale .3s ease;
+}
+.hero-choice:hover{
+  scale: 1.2;
+}
+.hero-choice:active{
+  scale: 1;
+}

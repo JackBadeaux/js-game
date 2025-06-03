@@ -1,0 +1,59 @@
+chatgpt:
+WHEN game starts:
+    SHOW character selection screen (Warrior, Mage, Rogue)
+    [Optional: use Bootstrap modal]
+
+WHEN player selects a character:
+    HIDE character selection screen
+    STORE selected character in 'player' object
+
+THEN:
+    SHOW 2 location images on screen (Lake, Forest, or Cave)
+    WAIT for player to click on a location
+
+WHEN location is selected:
+    CHANGE background to match location
+    SPAWN a monster based on location
+        - Cave = Troll
+        - Forest = Goblin
+        - Lake = Water Serpent (if included)
+
+START battle loop:
+    WHILE player HP > 0 AND monster HP > 0:
+        MONSTER attacks first
+            - Deals 10 damage to player
+        PLAYER chooses:
+            - Basic attack (damage varies by character)
+            - Block (reduce next hit by half)
+            - Special attack (unique per character)
+
+    IF player HP <= 0:
+        SHOW “Game Over” screen
+
+    IF monster HP <= 0:
+        SHOW “Victory” screen and option to continue or end game
+
+
+
+me:
+3 characters to choose from
+go to 2-3 different locations
+fight a monster
+
+
+
+when game start show characters select screen (warrior, mage, rogue) (maybe make bootstrap modal for it)
+
+hide screen after choice
+
+store selection in player object
+
+transtion to 2-3 images on screen of different locations to choose from (lake, forest, or cave)
+
+change the background to match the selection
+
+spawn the monster (different monsters in each biome)
+
+make monster deal 10 dmg to player each turn
+
+player deals different dmg to monster based on character, can block, speical attack based on character
