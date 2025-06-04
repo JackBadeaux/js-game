@@ -18,8 +18,8 @@ const rogue = {
 }
 const player = {}
 const heroButton = document.querySelectorAll(".hero-choice")
-// const statInfo = document.getElementById("statInfo")
-const div = document.createElement("div")
+const statInfo = document.getElementById("statInfo")
+// const div = document.createElement("div")
 
 
 heroButton.forEach(button => {
@@ -34,5 +34,6 @@ heroButton.forEach(button => {
             Object.assign(player, rogue);
             statInfo.textContent = Object.entries(player)
         }
+        document.getElementById("characterSelectPage").style.display= "none"
     });
 });
