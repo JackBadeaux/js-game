@@ -1,3 +1,5 @@
+action text based game
+
 chatgpt:
 WHEN game starts:
     SHOW character selection screen (Warrior, Mage, Rogue)
