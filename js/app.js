@@ -2,7 +2,7 @@ const mage = {
     name: "Mage",
     hp: 100,
     dmg: 15,
-    defence: 2,    
+    defence: 2,
 }
 const warrior = {
     name: "Warrior",
@@ -11,17 +11,28 @@ const warrior = {
     defence: 5,
 }
 const rogue = {
-    name: "rogue",
+    name: "Rogue",
     hp: 70,
     dmg: 20,
     defence: 0,
 }
-debugger
+const player = {}
 const heroButton = document.querySelectorAll(".hero-choice")
+// const statInfo = document.getElementById("statInfo")
+const div = document.createElement("div")
+
 
 heroButton.forEach(button => {
     button.addEventListener("click", () => {
-        console.log("clicked button", button.id);
-        
+        if (button.id === "mage") {
+            Object.assign(player, mage);
+            statInfo.textContent = Object.entries(player)
+        } else if (button.id === "warrior") {
+            Object.assign(player, warrior);
+            statInfo.textContent = Object.entries(player)
+        } else if (button.id === "rogue") {
+            Object.assign(player, rogue);
+            statInfo.textContent = Object.entries(player)
+        }
     });
 });
