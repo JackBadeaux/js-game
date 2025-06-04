@@ -27,7 +27,7 @@ START battle loop:
         PLAYER chooses:
             - Basic attack (damage varies by character)
             - Block (reduce next hit by half)
-            - Special attack (unique per character)
+            - Special attack (unique per character) (maybe)
 
     IF player HP <= 0:
         SHOW “Game Over” screen
