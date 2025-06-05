@@ -16,7 +16,6 @@ THEN:
 WHEN location is selected:
     CHANGE background to match location
     SPAWN a monster based on location
-        - Cave = Troll
         - Forest = Goblin
         - Lake = Water Serpent (if included)
 
@@ -58,4 +57,4 @@ spawn the monster (different monsters in each biome)
 
 make monster deal 10 dmg to player each turn
 
-player deals different dmg to monster based on character, can block, speical attack based on character
+player deals different dmg to monster based on character, can block, 

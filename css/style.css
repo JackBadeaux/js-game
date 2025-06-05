@@ -15,13 +15,17 @@ main,body,html {
   display: flex;
   justify-content: space-evenly;
 }
-.hero-choice{
+button{
   border: none;
   transition: scale .3s ease;
 }
-.hero-choice:hover{
+button:hover{
   scale: 1.2;
 }
-.hero-choice:active{
+button:active{
   scale: 1;
+}
+#locationSelectPage{
+  display: flex;
+  justify-content: space-evenly;
 }
