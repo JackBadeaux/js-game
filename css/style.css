@@ -29,3 +29,14 @@ button:active{
   display: flex;
   justify-content: space-evenly;
 }
+#battleLog{
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+#battleButtons{
+  width: 50%;
+  display: flex;
+  justify-content: space-evenly;
+}
