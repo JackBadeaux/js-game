@@ -36,7 +36,9 @@ const locationButton = document.querySelectorAll(".location-button")
 let currentMonster = null
 const main = document.querySelector("main")
 main.appendChild(monsterDisplay)
-
+document.getElementById("battleLog").style.display = "none"
+document.getElementById("headerBattle").style.display = "none"
+document.getElementById("battleButtons").style.display = "none"
 
 // ! Character Select
 heroButton.forEach(button => {
@@ -45,7 +47,7 @@ heroButton.forEach(button => {
             Object.assign(player, mage);
             statInfo.innerHTML = `
             <div>Name: ${player.name}</div>
-            <div>❤️: ${player.hp}</div>
+            <div id="playerHP">❤️: ${player.hp}</div>
             <div>⚔️: ${player.dmg}</div>
             <div>🛡️: ${player.defence}</div>`;
 
@@ -53,14 +55,14 @@ heroButton.forEach(button => {
             Object.assign(player, warrior);
             statInfo.innerHTML = `
             <div>Name: ${player.name}</div>
-            <div>❤️: ${player.hp}</div>
+            <div id="playerHP">❤️: ${player.hp}</div>
             <div>⚔️: ${player.dmg}</div>
             <div>🛡️: ${player.defence}</div>`;
         } else if (button.id === "rogue") {
             Object.assign(player, rogue);
             statInfo.innerHTML = `
             <div>Name: ${player.name}</div>
-            <div>❤️: ${player.hp}</div>
+            <div id="playerHP">❤️: ${player.hp}</div>
             <div>⚔️: ${player.dmg}</div>
             <div>🛡️: ${player.defence}</div>`;
         }
@@ -84,20 +86,25 @@ locationButton.forEach(button => {
             currentMonster = {...goblin}
         }
         document.getElementById("locationSelectPage").style.display = "none"
-
-        monsterDisplay.innerHTML = `
-        <div id="enemyHP"> ${currentMonster.name}'s: HP ${currentMonster.hp} </div>`
-    
+        document.getElementById("headerWelcome").style.display = "none"
+        document.getElementById("battleLog").style.display = "flex"
+        document.getElementById("headerBattle").style.display = "block"
+        document.getElementById("battleButtons").style.display = "block"
+        monsterDisplay.innerHTML = `<div id="enemyHP"> ${currentMonster.name}'s: HP ${currentMonster.hp} </div>`
     });
 });
 // ! Battle logic
 const attackButton = document.getElementById("attack")
 const blockButton = document.getElementById("block")
 let playerBlock = false
+blockButton.addEventListener("click", () =>{
+    playerBlock = true   
+    enemyTurn()
+});
 attackButton.addEventListener("click",()=>{
     let damage = currentMonster.dmg
     currentMonster.hp -= player.dmg
-     document.getElementById("enemyHP").textContent =`${currentMonster.name}'s: HP ${currentMonster.hp} `
+    document.getElementById("enemyHP").textContent =`${currentMonster.name}'s: HP ${currentMonster.hp} `
     const message = `${player.name} attacks and deals ${player.dmg} damage!`;
     const entry = document.createElement("div");
     entry.textContent = message;
@@ -108,14 +115,12 @@ function enemyTurn(params) {
     let damage = currentMonster.dmg
     if (playerBlock === true) {
         damage = 0
-        player.hp -= damage
     }
     player.hp -= damage
+    playerBlock = false
     const message = `${currentMonster.name} attacks and deals ${damage} damage!`;
     const entry = document.createElement("div");
     entry.textContent = message;
+    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
     battleLog.appendChild(entry);   
 }
-blockButton.addEventListener("click", () =>{
-    playerBlock = true
-});

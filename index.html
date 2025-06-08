@@ -11,7 +11,8 @@
 
 <body>
     <main class="roboto">
-                    <h1 class="h1 text-center">Begin your adventure</h1>
+        <h1 class="h1 text-center" id="headerWelcome">Begin your adventure.</h1>
+        <h1 class="h1 text-center" id="headerBattle">Battle Start!</h1>
         <div id="characterSelectPage">
             <div class="pick-hero-div">
                 <div class="mage">
@@ -30,11 +31,10 @@
             <button class="location-button" id="forest">Forest</button>
             <button class="location-button" id="lake">Lake</button>
         </div>
-        <div id="battleLog">
-            <div id="battleButtons">
+        <div id="battleLog" class="text-center"></div>
+        <div id="battleButtons">
                 <button id="attack">Attack</button>
                 <button id="block">Block</button>
-            </div>
         </div>
     </main>
     <script src="./js/app.js"></script>
