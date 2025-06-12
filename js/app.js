@@ -14,18 +14,18 @@ const warrior = {
 const rogue = {
     name: "Rogue",
     hp: 80,
-    dmg: 25,
+    dmg: 22,
     defence: 0,
 }
 const goblin = {
     name: "Goblin",
     hp: 100,
-    dmg: 20,
+    dmg: 19,
 }
 const waterSerpent = {
     name: "Water Serpent",
     hp: 100,
-    dmg: 20,
+    dmg: 19,
 }
 const player = {}
 const battleLog = document.getElementById("battleLog")
@@ -138,7 +138,7 @@ attackButton.addEventListener("click", () => {
   if (gameOver) return; 
 
   let isCrit = Math.random() < 0.4; 
-  let damage = Math.floor(Math.random() * player.dmg) + 5;
+  let damage = Math.floor(Math.random() * player.dmg) + 1;
   if (isCrit) {
     damage *= 2;
   }
@@ -162,9 +162,29 @@ attackButton.addEventListener("click", () => {
     enemyTurn(); // only let enemy go if game isn’t over
   }
 });
-// ! enemy Turn
-function enemyTurn() {
-  let baseDamage = Math.floor(Math.random() * currentMonster.dmg) + 5;
+
+// ! goblin special attack
+function golbinSpecial(params) {
+    let baseDamage = 20
+    let damage = baseDamage 
+
+    if (playerBlock){
+        damage = Math.floor( damage / 2)
+    }
+    if (damage < 0) damage = 0;
+    let message = `${currentMonster.name} bites and ingores defence and deals ${damage} damage!`;
+      player.hp -= damage;
+  if (player.hp < 0) player.hp = 0;
+  playerBlock = false;
+  const entry = document.createElement("div");
+  entry.textContent = message;
+  document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
+  battleLog.appendChild(entry);
+
+}
+// ! enemy attack
+function enemyAutoAttack(params) {
+    let baseDamage = Math.floor(Math.random() * currentMonster.dmg) + 1;
   let damage = baseDamage - player.defence;
 
   if (playerBlock) {
@@ -191,6 +211,19 @@ function enemyTurn() {
   entry.textContent = message;
   document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
   battleLog.appendChild(entry);
+    }
+    // ! enemy turn
+function enemyTurn() {
+    if (currentMonster.name === "Goblin") {
+    let attackRoll = Math.random() <0.25
+    if (attackRoll){
+        golbinSpecial()
+    } else {
+        enemyAutoAttack()
+    }
+    } else {
+            enemyAutoAttack();
+    }
 
   gameOverCheck();
 }
@@ -200,7 +233,7 @@ function showCustomAlert(title, text, onClose = null) {
   const customAlert = document.getElementById("customAlert");
   const customAlertTitle = document.getElementById("customAlertTitle");
   const customAlertText = document.getElementById("customAlertText");
-  const closeBtn = document.getElementById("customAlertClose");
+
 
   customAlertTitle.textContent = title;
   customAlertText.textContent = text;
