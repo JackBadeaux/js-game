@@ -151,7 +151,7 @@ attackButton.addEventListener("click", () => {
     message += " It's a crit!";
   }
 
-  document.getElementById("enemyHP").textContent = `${currentMonster.name}'s: HP ${currentMonster.hp}`;
+  document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
   const entry = document.createElement("div");
   entry.textContent = message;
   battleLog.appendChild(entry);   
@@ -159,7 +159,7 @@ attackButton.addEventListener("click", () => {
   gameOverCheck(); 
 
   if (!gameOver) {
-    enemyTurn(); // only let enemy go if game isn’t over
+    enemyTurn(); 
   }
 });
 
