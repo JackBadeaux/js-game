@@ -11,9 +11,9 @@
 
 <body>
     <main class="roboto">
-        <h1 class="h1 text-center" id="headerWelcome">Begin your adventure.</h1>
-        <h1 class="h1 text-center" id="headerBattle">Battle Start!</h1>
-        <div id="characterSelectPage">
+        <h1 class="h1 text-center start" id="headerWelcome" >Begin your adventure.</h1>
+        <h1 class="h1 text-center battle" id="headerBattle" >Battle Start!</h1>
+        <div id="characterSelectPage" class="start">
             <div class="pick-hero-div">
                 <div class="mage">
                     <button class="hero-choice" id="mage">Mage</button>
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="stats">
+        <div class="stats battle">
             <div id="statInfo" class="text-capitalize text-center"></div>
             <div id="monsterDisplay" class="text-center"></div>
         </div>
@@ -34,11 +34,12 @@
             <button class="location-button" id="forest">Forest</button>
             <button class="location-button" id="lake">Lake</button>
         </div>
-        <div id="battleButtons">
+        <div id="battleButtons" class="battle">
             <button id="attack">Attack</button>
             <button id="block">Block</button>
+            <button id="special">Special</button>
         </div>
-        <div id="battleLog" class="text-center"></div>
+        <div id="battleLog" class="text-center battle"></div>
 
 
 
@@ -51,6 +52,7 @@
             <label for="resetButton">Reset</label>
             <button id="resetButton" class="m-2"><i class="fa fa-undo" aria-hidden="true"></i></button>
             </div>
+        </div>
         </div>
     <script src="./js/app.js"></script>
     <script src="https://kit.fontawesome.com/6fd030c6e8.js" crossorigin="anonymous"></script>

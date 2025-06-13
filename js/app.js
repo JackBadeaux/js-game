@@ -1,32 +1,3 @@
-// ! Characters
-const mage = {
-    name: "Mage",
-    hp: 120,
-    dmg: 15,
-    defence: 1,
-}
-const warrior = {
-    name: "Warrior",
-    hp: 160,
-    dmg: 10,
-    defence: 1,
-}
-const rogue = {
-    name: "Rogue",
-    hp: 80,
-    dmg: 22,
-    defence: 0,
-}
-const goblin = {
-    name: "Goblin",
-    hp: 100,
-    dmg: 20,
-}
-const waterSerpent = {
-    name: "Water Serpent",
-    hp: 100,
-    dmg: 10,
-}
 const player = {}
 const battleLog = document.getElementById("battleLog")
 const heroButton = document.querySelectorAll(".hero-choice")
@@ -41,6 +12,101 @@ document.getElementById("headerBattle").style.display = "none"
 document.getElementById("battleButtons").style.display = "none"
 document.getElementById("locationSelectPage").style.display = "none"
 document.getElementById("customAlert").classList.add("hidden")
+// ! Battle logic
+
+const attackButton = document.getElementById("attack");
+const blockButton = document.getElementById("block");
+const specialButton = document.getElementById("special")
+let playerBlock = false;
+let gameOver = false;
+function gameOverCheck() {
+    if (gameOver) return;
+    if (player.hp <= 0) {
+        player.hp = 0;
+        const message = "You Lose";
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
+        battleLog.appendChild(entry)
+        gameOver = true
+        showCustomAlert(`You have lost`, `Press reset to play again`)
+    } else if (currentMonster.hp <= 0) {
+        currentMonster.hp = 0;
+        const message = `You Win`;
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
+        battleLog.appendChild(entry);
+        gameOver = true
+        showCustomAlert('You have won', `Press reset to play again`)
+    }
+
+}
+// ! Characters
+const mage = {
+    name: "Mage",
+    hp: 120,
+    dmg: 15,
+    defence: 1,
+    specialAttack: () => {
+        let damage = 25
+        currentMonster.hp -= damage
+        let message = `${player.name} cast Fireball deals ${damage} damage!`;
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
+
+        
+        battleLog.appendChild(entry)
+    }
+}
+const warrior = {
+    name: "Warrior",
+    hp: 160,
+    dmg: 10,
+    defence: 3,
+    specialAttack: () => {
+        let heal = 25
+        player.hp += heal
+        if (player.hp > 160){
+            player.hp = 160
+        }
+        let message = `${player.name} cast heal and restores ${heal} HP!`;
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        battleLog.appendChild(entry)
+    }
+}
+const rogue = {
+    name: "Rogue",
+    hp: 80,
+    dmg: 22,
+    defence: 0,
+    specialAttack: () => {
+        let damage = 35
+        currentMonster.hp -= damage
+        if(currentMonster.hp < 0) {
+            currentMonster.hp = 0
+        }
+        let message = `${player.name} uses their daggers and cast Shadow Blade! and deals ${damage} damage!`;
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
+
+        battleLog.appendChild(entry)
+    }
+}
+const goblin = {
+    name: "Goblin",
+    hp: 100,
+    dmg: 20,
+}
+const waterSerpent = {
+    name: "Water Serpent",
+    hp: 100,
+    dmg: 10,
+}
+
 
 // ! Character Select
 heroButton.forEach(button => {
@@ -96,48 +162,30 @@ locationButton.forEach(button => {
         document.getElementById("battleLog").style.display = "flex";
         document.getElementById("headerBattle").style.display = "block";
         document.getElementById("battleButtons").style.display = "flex";
-        monsterDisplay.innerHTML = `<div id="enemyHP"> ${currentMonster.name}'s: HP ${currentMonster.hp} </div>`
+        monsterDisplay.innerHTML = `<div id="enemyHP"> ${currentMonster.name}'s HP ${currentMonster.hp} </div>`
+        document.querySelector(".stats").style.display = "grid"
     });
 });
-// ! Battle logic
 
-const attackButton = document.getElementById("attack");
-const blockButton = document.getElementById("block");
-let playerBlock = false;
-let gameOver = false;
-function gameOverCheck() {
-    if (gameOver) return;
-    if (player.hp <= 0) {
-        player.hp = 0;
-        const message = "You Lose";
-        const entry = document.createElement("div");
-        entry.textContent = message;
-        document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
-        battleLog.appendChild(entry)
-        gameOver = true
-        showCustomAlert(`You have lost`, `Press reset to play again`)
-    } else if (currentMonster.hp <= 0) {
-        currentMonster.hp = 0;
-        const message = `You Win`;
-        const entry = document.createElement("div");
-        entry.textContent = message;
-        document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
-        battleLog.appendChild(entry);
-        gameOver = true
-        showCustomAlert('You have won', `Press reset to play again`)
+// ! special button
+specialButton.addEventListener("click", () => {
+    player.specialAttack()
+    if (!gameOver) {
+        enemyTurn();
     }
-
-}
+})
 // ! block button
 blockButton.addEventListener("click", () => {
     playerBlock = true
-    enemyTurn()
+    if (!gameOver) {
+        enemyTurn();
+    }
 });
 // !attack button
 attackButton.addEventListener("click", () => {
     if (gameOver) return;
 
-    let isCrit = Math.random() < 0.4;
+    let isCrit = Math.random() < 0.25;
     let damage = Math.floor(Math.random() * player.dmg) + 1;
     if (isCrit) {
         damage *= 2;
@@ -166,6 +214,11 @@ attackButton.addEventListener("click", () => {
 function waterSerpentSpeical() {
     let baseDamage = 5;
     let damage = baseDamage;
+    let isCrit = Math.random() < 0.25;
+
+    if (isCrit) {
+        damage *= 2;
+    }
 
     if (playerBlock) {
         damage = Math.floor(damage / 2);
@@ -174,7 +227,10 @@ function waterSerpentSpeical() {
     if (damage < 0) damage = 0;
 
     let message = `${currentMonster.name} spits venom and deals ${damage} damage!`;
-    if (playerBlock){
+    if (isCrit) {
+        message += " It's a crit!";
+    }
+    if (playerBlock) {
         message = `${player.name} blocks and ${currentMonster.name} spits venom and deals ${damage} damage!`
     }
     player.hp -= damage;
@@ -202,15 +258,22 @@ function DOTdamage() {
 function golbinSpecial() {
     // let baseDamage = 20
     let damage = goblin.dmg
+    let isCrit = Math.random() < .25;
 
-    if (playerBlock) {
-        damage = Math.floor(damage / 2)
+    if (isCrit) {
+        damage *= 2;
     }
     if (damage < 0) damage = 0;
     let message = `${currentMonster.name} bites and ingores defence and deals ${damage} damage!`;
+    if (isCrit) {
+        message += " It's a crit!";
+    }
+    if (playerBlock) {
+        message = `${player.name} blocks and ${currentMonster.name} ingores it and bites and deals ${damage}`
+    }
     player.hp -= damage;
     if (player.hp < 0) player.hp = 0;
-
+    playerBlock = false
     const entry = document.createElement("div");
     entry.textContent = message;
     document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
@@ -228,7 +291,7 @@ function enemyAutoAttack() {
 
     if (damage < 0) damage = 1;
 
-    let isCrit = Math.random() < 0.4;
+    let isCrit = Math.random() < 0.25;
 
     if (isCrit) {
         damage *= 2;
@@ -239,7 +302,7 @@ function enemyAutoAttack() {
 
 
     let message = `${currentMonster.name} attacks and deals ${damage} damage!`;
-    if (playerBlock){
+    if (playerBlock) {
         message = `${player.name} blocks and ${currentMonster.name} attacks and deals ${damage} damage!`
     }
     if (isCrit) {
@@ -254,7 +317,7 @@ function enemyAutoAttack() {
 // ! enemy turn
 function enemyTurn() {
     if (currentMonster.name === "Goblin") {
-        let attackRoll = Math.random() < 0.25
+        let attackRoll = Math.random() < .25;
         if (attackRoll) {
             golbinSpecial()
         } else {
@@ -262,18 +325,16 @@ function enemyTurn() {
         }
     } else if (currentMonster.name === "Water Serpent") {
         if (venomCheck) {
-            DOTdamage(); 
+            DOTdamage();
         }
 
-        let attackRoll = Math.random() < 0.25;
+        let attackRoll = Math.random() < 0.45;
         if (attackRoll && !venomCheck) {
             waterSerpentSpeical();
         } else {
             enemyAutoAttack();
         }
     }
-
-
     gameOverCheck();
 }
 
@@ -291,5 +352,23 @@ function showCustomAlert(title, text, onClose = null) {
 }
 //! reset button
 document.getElementById("resetButton").addEventListener("click", function () {
-    location.reload();
+    resetGame()
 })
+// ! reset function
+function resetGame() {
+    const customAlert = document.getElementById("customAlert");
+    const start = document.querySelectorAll(".start")
+    const battle = document.querySelectorAll(".battle")
+    start.forEach(start => {
+        start.style.display = "block"
+    })
+    battle.forEach(battle => {
+        battle.style.display = "none"
+    })
+    gameOver = false
+    document.body.style.backgroundColor = "grey";
+    document.documentElement.style.backgroundColor = "grey";
+    document.querySelector("main").style.backgroundColor = "grey";
+    customAlert.classList.add("hidden");
+    battleLog.innerHTML = "";
+}
