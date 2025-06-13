@@ -8,7 +8,7 @@ const mage = {
 const warrior = {
     name: "Warrior",
     hp: 160,
-    dmg: 8,
+    dmg: 10,
     defence: 1,
 }
 const rogue = {
@@ -20,12 +20,12 @@ const rogue = {
 const goblin = {
     name: "Goblin",
     hp: 100,
-    dmg: 19,
+    dmg: 20,
 }
 const waterSerpent = {
     name: "Water Serpent",
     hp: 100,
-    dmg: 19,
+    dmg: 10,
 }
 const player = {}
 const battleLog = document.getElementById("battleLog")
@@ -34,6 +34,7 @@ const statInfo = document.getElementById("statInfo")
 const monsterDisplay = document.getElementById("monsterDisplay");
 const locationButton = document.querySelectorAll(".location-button")
 let currentMonster = null
+let venomCheck = null
 const main = document.querySelector("main")
 document.getElementById("battleLog").style.display = "none"
 document.getElementById("headerBattle").style.display = "none"
@@ -80,15 +81,15 @@ locationButton.forEach(button => {
             document.documentElement.style.backgroundColor = "#6699CC";
             document.querySelector("main").style.backgroundColor = "#6699CC";
             document.getElementById("statInfo").style.display = "block"
-            currentMonster = {...waterSerpent}
-            
+            currentMonster = { ...waterSerpent }
+
 
         } else if (button.id === "forest") {
             document.body.style.backgroundColor = "green";
             document.documentElement.style.backgroundColor = "green";
             document.querySelector("main").style.backgroundColor = "green";
             document.getElementById("statInfo").style.display = "block"
-            currentMonster = {...goblin}
+            currentMonster = { ...goblin }
         }
         document.getElementById("locationSelectPage").style.display = "none";
         document.getElementById("headerWelcome").style.display = "none";
@@ -105,140 +106,188 @@ const blockButton = document.getElementById("block");
 let playerBlock = false;
 let gameOver = false;
 function gameOverCheck() {
-     if (gameOver) return;
+    if (gameOver) return;
     if (player.hp <= 0) {
         player.hp = 0;
-    const message = "You Lose";
-    const entry = document.createElement("div");
-    entry.textContent = message;
-    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
-    battleLog.appendChild(entry)
-    gameOver = true
-    showCustomAlert(`You have lost`,`Press reset to play again`)
-    } else if (currentMonster.hp <= 0 ) {
+        const message = "You Lose";
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
+        battleLog.appendChild(entry)
+        gameOver = true
+        showCustomAlert(`You have lost`, `Press reset to play again`)
+    } else if (currentMonster.hp <= 0) {
         currentMonster.hp = 0;
-    const message = `You Win`;
-    const entry = document.createElement("div");
-    entry.textContent = message;
-    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
-    battleLog.appendChild(entry);
-    gameOver = true 
-    showCustomAlert('You have won',`Press reset to play again`)
+        const message = `You Win`;
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
+        battleLog.appendChild(entry);
+        gameOver = true
+        showCustomAlert('You have won', `Press reset to play again`)
     }
 
 }
 // ! block button
-blockButton.addEventListener("click", () =>{
-
-    playerBlock = true   
+blockButton.addEventListener("click", () => {
+    playerBlock = true
     enemyTurn()
 });
 // !attack button
 attackButton.addEventListener("click", () => {
-  if (gameOver) return; 
+    if (gameOver) return;
 
-  let isCrit = Math.random() < 0.4; 
-  let damage = Math.floor(Math.random() * player.dmg) + 1;
-  if (isCrit) {
-    damage *= 2;
-  }
+    let isCrit = Math.random() < 0.4;
+    let damage = Math.floor(Math.random() * player.dmg) + 1;
+    if (isCrit) {
+        damage *= 2;
+    }
 
-  currentMonster.hp -= damage;
-  if (currentMonster.hp < 0) currentMonster.hp = 0;
+    currentMonster.hp -= damage;
+    if (currentMonster.hp < 0) currentMonster.hp = 0;
 
-  let message = `${player.name} attacks and deals ${damage} damage!`;
-  if (isCrit) {
-    message += " It's a crit!";
-  }
+    let message = `${player.name} attacks and deals ${damage} damage!`;
+    if (isCrit) {
+        message += " It's a crit!";
+    }
 
-  document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
-  const entry = document.createElement("div");
-  entry.textContent = message;
-  battleLog.appendChild(entry);   
+    document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
+    const entry = document.createElement("div");
+    entry.textContent = message;
+    battleLog.appendChild(entry);
 
-  gameOverCheck(); 
+    gameOverCheck();
 
-  if (!gameOver) {
-    enemyTurn(); 
-  }
+    if (!gameOver) {
+        enemyTurn();
+    }
 });
+// ! water serpant special 
+function waterSerpentSpeical() {
+    let baseDamage = 5;
+    let damage = baseDamage;
 
-// ! goblin special attack
-function golbinSpecial(params) {
-    let baseDamage = 20
-    let damage = baseDamage 
+    if (playerBlock) {
+        damage = Math.floor(damage / 2);
+    }
 
+    if (damage < 0) damage = 0;
+
+    let message = `${currentMonster.name} spits venom and deals ${damage} damage!`;
     if (playerBlock){
-        damage = Math.floor( damage / 2)
+        message = `${player.name} blocks and ${currentMonster.name} spits venom and deals ${damage} damage!`
+    }
+    player.hp -= damage;
+    if (player.hp < 0) player.hp = 0;
+    const entry = document.createElement("div");
+    entry.textContent = message;
+    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
+    battleLog.appendChild(entry);
+    venomCheck = true
+}
+// ? Damage over time for water serpant special
+function DOTdamage() {
+    let DOTdamage = Math.floor(Math.random() * 3) + 1;
+    let damage = DOTdamage
+    if (damage < 0) damage = 0;
+    let message = `You are posioned and take ${damage} damage!`;
+    player.hp -= damage;
+    if (player.hp < 0) player.hp = 0;
+    const entry = document.createElement("div");
+    entry.textContent = message;
+    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
+    battleLog.appendChild(entry);
+}
+// ! goblin special attack
+function golbinSpecial() {
+    // let baseDamage = 20
+    let damage = goblin.dmg
+
+    if (playerBlock) {
+        damage = Math.floor(damage / 2)
     }
     if (damage < 0) damage = 0;
     let message = `${currentMonster.name} bites and ingores defence and deals ${damage} damage!`;
-      player.hp -= damage;
-  if (player.hp < 0) player.hp = 0;
-  playerBlock = false;
-  const entry = document.createElement("div");
-  entry.textContent = message;
-  document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
-  battleLog.appendChild(entry);
+    player.hp -= damage;
+    if (player.hp < 0) player.hp = 0;
+
+    const entry = document.createElement("div");
+    entry.textContent = message;
+    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
+    battleLog.appendChild(entry);
 
 }
 // ! enemy attack
-function enemyAutoAttack(params) {
-    let baseDamage = Math.floor(Math.random() * currentMonster.dmg) + 1;
-  let damage = baseDamage - player.defence;
+function enemyAutoAttack() {
+    let baseDamage = Math.floor(Math.random() * currentMonster.dmg) + 2;
+    let damage = baseDamage - player.defence;
 
-  if (playerBlock) {
-    damage = Math.floor(damage / 2);
-  }
-
-  if (damage < 0) damage = 0;
-
-  let isCrit = Math.random() < 0.4;
-  if (isCrit) {
-    damage *= 2;
-  }
-
-  player.hp -= damage;
-  if (player.hp < 0) player.hp = 0;
-  playerBlock = false;
-
-  let message = `${currentMonster.name} attacks and deals ${damage} damage!`;
-  if (isCrit) {
-    message += " It's a crit!";
-  }
-
-  const entry = document.createElement("div");
-  entry.textContent = message;
-  document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
-  battleLog.appendChild(entry);
+    if (playerBlock) {
+        damage = Math.floor(damage / 2);
     }
-    // ! enemy turn
+
+    if (damage < 0) damage = 1;
+
+    let isCrit = Math.random() < 0.4;
+
+    if (isCrit) {
+        damage *= 2;
+    }
+
+    player.hp -= damage;
+    if (player.hp < 0) player.hp = 0;
+
+
+    let message = `${currentMonster.name} attacks and deals ${damage} damage!`;
+    if (playerBlock){
+        message = `${player.name} blocks and ${currentMonster.name} attacks and deals ${damage} damage!`
+    }
+    if (isCrit) {
+        message += " It's a crit!";
+    }
+    playerBlock = false;
+    const entry = document.createElement("div");
+    entry.textContent = message;
+    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
+    battleLog.appendChild(entry);
+}
+// ! enemy turn
 function enemyTurn() {
     if (currentMonster.name === "Goblin") {
-    let attackRoll = Math.random() <0.25
-    if (attackRoll){
-        golbinSpecial()
-    } else {
-        enemyAutoAttack()
-    }
-    } else {
+        let attackRoll = Math.random() < 0.25
+        if (attackRoll) {
+            golbinSpecial()
+        } else {
+            enemyAutoAttack()
+        }
+    } else if (currentMonster.name === "Water Serpent") {
+        if (venomCheck) {
+            DOTdamage(); 
+        }
+
+        let attackRoll = Math.random() < 0.25;
+        if (attackRoll && !venomCheck) {
+            waterSerpentSpeical();
+        } else {
             enemyAutoAttack();
+        }
     }
 
-  gameOverCheck();
+
+    gameOverCheck();
 }
 
 //! custom alert logic
 function showCustomAlert(title, text, onClose = null) {
-  const customAlert = document.getElementById("customAlert");
-  const customAlertTitle = document.getElementById("customAlertTitle");
-  const customAlertText = document.getElementById("customAlertText");
+    const customAlert = document.getElementById("customAlert");
+    const customAlertTitle = document.getElementById("customAlertTitle");
+    const customAlertText = document.getElementById("customAlertText");
 
 
-  customAlertTitle.textContent = title;
-  customAlertText.textContent = text;
+    customAlertTitle.textContent = title;
+    customAlertText.textContent = text;
 
-  customAlert.classList.remove("hidden");
+    customAlert.classList.remove("hidden");
 }
 //! reset button
 document.getElementById("resetButton").addEventListener("click", function () {
