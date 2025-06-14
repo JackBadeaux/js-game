@@ -96,3 +96,8 @@ margin-bottom: 100px;
   font-weight: 500;
   font-style: normal;
 }
+#battleRecord{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  text-align: center;
+}

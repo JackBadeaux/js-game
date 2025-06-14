@@ -13,6 +13,10 @@ document.getElementById("battleButtons").style.display = "none"
 document.getElementById("locationSelectPage").style.display = "none"
 document.getElementById("customAlert").classList.add("hidden")
 let specialMoveDisplay = document.getElementById("specialMove")
+let winCount = 0
+let loseCount = 0
+const winCountDisplay = document.getElementById("winCount")
+const loseCountDisplay = document.getElementById("loseCount")
 
 // ! Battle logic
 
@@ -31,6 +35,11 @@ function gameOverCheck() {
         document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
         battleLog.appendChild(entry)
         gameOver = true
+        loseCount++
+        console.log(loseCount);
+        loseCountDisplay.textContent = loseCount
+
+
         showCustomAlert(`You have lost`, `Press reset to play again`)
     } else if (currentMonster.hp <= 0) {
         currentMonster.hp = 0;
@@ -40,6 +49,10 @@ function gameOverCheck() {
         document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
         battleLog.appendChild(entry);
         gameOver = true
+        winCount++
+        console.log(winCount);
+        winCountDisplay.textContent = winCount
+        
         showCustomAlert('You have won', `Press reset to play again`)
     }
 
@@ -57,8 +70,6 @@ const mage = {
         const entry = document.createElement("div");
         entry.textContent = message;
         document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
-
-        
         battleLog.appendChild(entry)
     }
 }
