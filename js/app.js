@@ -12,6 +12,8 @@ document.getElementById("headerBattle").style.display = "none"
 document.getElementById("battleButtons").style.display = "none"
 document.getElementById("locationSelectPage").style.display = "none"
 document.getElementById("customAlert").classList.add("hidden")
+let specialMoveDisplay = document.getElementById("specialMove")
+
 // ! Battle logic
 
 const attackButton = document.getElementById("attack");
@@ -92,7 +94,6 @@ const rogue = {
         const entry = document.createElement("div");
         entry.textContent = message;
         document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
-
         battleLog.appendChild(entry)
     }
 }
@@ -118,6 +119,7 @@ heroButton.forEach(button => {
             <div id="playerHP">❤️: ${player.hp}</div>
             <div>⚔️: ${player.dmg}</div>
             <div>🛡️: ${player.defence}</div>`
+            specialMoveDisplay.textContent = "Fireball"
 
         } else if (button.id === "warrior") {
             Object.assign(player, warrior);
@@ -126,6 +128,8 @@ heroButton.forEach(button => {
             <div id="playerHP">❤️: ${player.hp}</div>
             <div>⚔️: ${player.dmg}</div>
             <div>🛡️: ${player.defence}</div>`
+            specialMoveDisplay.textContent = "Heal"
+            
         } else if (button.id === "rogue") {
             Object.assign(player, rogue);
             statInfo.innerHTML = `
@@ -133,6 +137,7 @@ heroButton.forEach(button => {
             <div id="playerHP">❤️: ${player.hp}</div>
             <div>⚔️: ${player.dmg}</div>
             <div>🛡️: ${player.defence}</div>`
+            specialMoveDisplay.textContent = "Shadow Blade"
         }
         document.getElementById("characterSelectPage").style.display = "none"
         document.getElementById("locationSelectPage").style.display = "flex"

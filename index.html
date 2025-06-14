@@ -11,8 +11,8 @@
 
 <body>
     <main class="roboto">
-        <h1 class="h1 text-center start" id="headerWelcome" >Begin your adventure.</h1>
-        <h1 class="h1 text-center battle" id="headerBattle" >Battle Start!</h1>
+        <h1 class="h1 text-center start" id="headerWelcome">Begin your adventure.</h1>
+        <h1 class="h1 text-center battle" id="headerBattle">Battle Start!</h1>
         <div id="characterSelectPage" class="start">
             <div class="pick-hero-div">
                 <div class="mage">
@@ -37,7 +37,10 @@
         <div id="battleButtons" class="battle">
             <button id="attack">Attack</button>
             <button id="block">Block</button>
-            <button id="special">Special</button>
+            <div id="specialDiv">
+                <h3 id="specialMove" class="manrope"></h3>
+                <button id="special">Special</button>
+            </div>
         </div>
         <div id="battleLog" class="text-center battle"></div>
 
@@ -49,11 +52,11 @@
             <p id="customAlertTitle"></p>
             <p id="customAlertText"></p>
             <div class="d-flex flex-column align-items-center">
-            <label for="resetButton">Reset</label>
-            <button id="resetButton" class="m-2"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                <label for="resetButton">Reset</label>
+                <button id="resetButton" class="m-2"><i class="fa fa-undo" aria-hidden="true"></i></button>
             </div>
         </div>
-        </div>
+    </div>
     <script src="./js/app.js"></script>
     <script src="https://kit.fontawesome.com/6fd030c6e8.js" crossorigin="anonymous"></script>
 </body>
