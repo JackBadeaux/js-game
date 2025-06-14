@@ -6,6 +6,7 @@ const monsterDisplay = document.getElementById("monsterDisplay");
 const locationButton = document.querySelectorAll(".location-button")
 let currentMonster = null
 let venomCheck = null
+let burnCheck = null
 const main = document.querySelector("main")
 document.getElementById("battleLog").style.display = "none"
 document.getElementById("headerBattle").style.display = "none"
@@ -36,7 +37,7 @@ function gameOverCheck() {
         battleLog.appendChild(entry)
         gameOver = true
         loseCount++
-        console.log(loseCount);
+
         loseCountDisplay.textContent = loseCount
 
 
@@ -50,9 +51,9 @@ function gameOverCheck() {
         battleLog.appendChild(entry);
         gameOver = true
         winCount++
-        console.log(winCount);
+
         winCountDisplay.textContent = winCount
-        
+
         showCustomAlert('You have won', `Press reset to play again`)
     }
 
@@ -81,7 +82,7 @@ const warrior = {
     specialAttack: () => {
         let heal = 25
         player.hp += heal
-        if (player.hp > 160){
+        if (player.hp > 160) {
             player.hp = 160
         }
         let message = `${player.name} cast heal and restores ${heal} HP!`;
@@ -98,7 +99,7 @@ const rogue = {
     specialAttack: () => {
         let damage = 35
         currentMonster.hp -= damage
-        if(currentMonster.hp < 0) {
+        if (currentMonster.hp < 0) {
             currentMonster.hp = 0
         }
         let message = `${player.name} uses their daggers and cast Shadow Blade! and deals ${damage} damage!`;
@@ -110,7 +111,7 @@ const rogue = {
 }
 const goblin = {
     name: "Goblin",
-    hp: 100,
+    hp: 1000,
     dmg: 20,
 }
 const waterSerpent = {
@@ -140,7 +141,7 @@ heroButton.forEach(button => {
             <div>⚔️: ${player.dmg}</div>
             <div>🛡️: ${player.defence}</div>`
             specialMoveDisplay.textContent = "Heal"
-            
+
         } else if (button.id === "rogue") {
             Object.assign(player, rogue);
             statInfo.innerHTML = `
@@ -186,16 +187,24 @@ locationButton.forEach(button => {
 // ! special button
 specialButton.addEventListener("click", () => {
     player.specialAttack()
+    if (gameOver) return;
     if (!gameOver) {
         enemyTurn();
     }
+    if (player.name = "Mage") {
+        DOTdamageBurn()
+    }
+    gameOverCheck()
+
 })
 // ! block button
 blockButton.addEventListener("click", () => {
+    if (gameOver) return;
     playerBlock = true
     if (!gameOver) {
         enemyTurn();
     }
+    gameOverCheck()
 });
 // !attack button
 attackButton.addEventListener("click", () => {
@@ -258,7 +267,7 @@ function waterSerpentSpeical() {
     venomCheck = true
 }
 // ? Damage over time for water serpant special
-function DOTdamage() {
+function DOTdamagePosion() {
     let DOTdamage = Math.floor(Math.random() * 3) + 1;
     let damage = DOTdamage
     if (damage < 0) damage = 0;
@@ -269,6 +278,23 @@ function DOTdamage() {
     entry.textContent = message;
     document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
     battleLog.appendChild(entry);
+}
+function DOTdamageBurn() {
+
+
+        burnCheck = true
+        let DOTdamage = Math.floor(Math.random() * 3) + 1;
+        let damage = DOTdamage
+        if (damage < 0) damage = 0;
+        let message = `You have burned the enemy and deal ${damage} damage!`;
+        currentMonster.hp -= damage;
+        if (currentMonster.hp < 0) currentMonster.hp = 0;
+        const entry = document.createElement("div");
+        entry.textContent = message;
+        document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
+        battleLog.appendChild(entry);
+    
+
 }
 // ! goblin special attack
 function golbinSpecial() {
@@ -341,7 +367,7 @@ function enemyTurn() {
         }
     } else if (currentMonster.name === "Water Serpent") {
         if (venomCheck) {
-            DOTdamage();
+            DOTdamagePosion();
         }
 
         let attackRoll = Math.random() < 0.45;
@@ -350,6 +376,14 @@ function enemyTurn() {
         } else {
             enemyAutoAttack();
         }
+    }
+    if (player.name = "Mage") {
+        if (burnCheck) {
+            DOTdamageBurn()
+            console.log(burnCheck);
+
+        }
+
     }
     gameOverCheck();
 }
