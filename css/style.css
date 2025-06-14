@@ -69,7 +69,8 @@ margin-bottom: 100px;
 }
 
 .modal-box {
-  background: rgba(255, 255, 255, 0.568);
+  background: rgb(0, 0, 0);
+  color: white;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
@@ -87,7 +88,7 @@ margin-bottom: 100px;
 }
 #specialMove{
   position: absolute;
-  top: 208px;
+  top: 290px;
 
 }
 .manrope {
@@ -100,4 +101,7 @@ margin-bottom: 100px;
   display: grid;
   grid-template-columns: repeat(2,1fr);
   text-align: center;
+}
+.special-move-label{
+  font-size: 28px;
 }

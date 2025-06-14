@@ -37,10 +37,7 @@ function gameOverCheck() {
         battleLog.appendChild(entry)
         gameOver = true
         loseCount++
-
         loseCountDisplay.textContent = loseCount
-
-
         showCustomAlert(`You have lost`, `Press reset to play again`)
     } else if (currentMonster.hp <= 0) {
         currentMonster.hp = 0;
@@ -111,13 +108,13 @@ const rogue = {
 }
 const goblin = {
     name: "Goblin",
-    hp: 1000,
+    hp: 100,
     dmg: 20,
 }
 const waterSerpent = {
     name: "Water Serpent",
     hp: 100,
-    dmg: 10,
+    dmg: 20,
 }
 
 
@@ -191,9 +188,12 @@ specialButton.addEventListener("click", () => {
     if (!gameOver) {
         enemyTurn();
     }
-    if (player.name = "Mage") {
+    if (!burnCheck) {
+        if (player.name === "Mage") {
         DOTdamageBurn()
     }
+    }
+
     gameOverCheck()
 
 })
@@ -377,11 +377,9 @@ function enemyTurn() {
             enemyAutoAttack();
         }
     }
-    if (player.name = "Mage") {
+    if (player.name === "Mage") {
         if (burnCheck) {
             DOTdamageBurn()
-            console.log(burnCheck);
-
         }
 
     }
