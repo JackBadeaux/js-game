@@ -182,32 +182,17 @@ locationButton.forEach(button => {
 
 // ! special button
 specialButton.addEventListener("click", () => {
-specialButton.addEventListener("click", () => {
     if (gameOver) return;
-
-    // 🔍 check cooldown
-    if (specialCooldown > 0) {
-        showCustomAlert("Special on cooldown", `Ready in ${specialCooldown} turn(s)`);
-        return;
-    }
-
-    // 🚀 perform the special
     player.specialAttack();
-
-    // ⏱️ set cooldown (3 turns)
-    specialCooldown = 3;
-
-    // 🐉 enemy turn
     if (!gameOver) enemyTurn();
 
-    // 🔥 apply DOT burn if needed
+
     if (!burnCheck && player.name === "Mage") {
         DOTdamageBurn();
     }
 
     gameOverCheck();
 });
-})
 // ! block button
 blockButton.addEventListener("click", () => {
     if (gameOver) return;
