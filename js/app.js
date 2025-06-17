@@ -18,39 +18,33 @@ let winCount = 0
 let loseCount = 0
 const winCountDisplay = document.getElementById("winCount")
 const loseCountDisplay = document.getElementById("loseCount")
-
+let speicalMoveCount = 0 
 // ! Battle logic
-
 const attackButton = document.getElementById("attack");
 const blockButton = document.getElementById("block");
 const specialButton = document.getElementById("special")
 let playerBlock = false;
 let gameOver = false;
-function gameOverCheck() {
-    if (gameOver) return;
-    if (player.hp <= 0) {
-        player.hp = 0;
-        const message = "You Lose";
+function winorlose(winorlosetext,entity,winorlose){
+        entity.hp = 0;
+        const message = winorlosetext;
         const entry = document.createElement("div");
         entry.textContent = message;
         document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
         battleLog.appendChild(entry)
         gameOver = true
+}
+function gameOverCheck() {
+    if (gameOver) return;
+    if (player.hp <= 0) {
         loseCount++
+        winorlose("You Lose",player.hp,loseCount)
         loseCountDisplay.textContent = loseCount
         showCustomAlert(`You have lost`, `Press reset to play again`)
     } else if (currentMonster.hp <= 0) {
-        currentMonster.hp = 0;
-        const message = `You Win`;
-        const entry = document.createElement("div");
-        entry.textContent = message;
-        document.getElementById("playerHP").textContent = `❤️: ${player.hp}`
-        battleLog.appendChild(entry);
-        gameOver = true
         winCount++
-
+        winorlose("You Win",currentMonster.hp,winCount)
         winCountDisplay.textContent = winCount
-
         showCustomAlert('You have won', `Press reset to play again`)
     }
 
@@ -82,7 +76,7 @@ const warrior = {
         if (player.hp > 160) {
             player.hp = 160
         }
-        let message = `${player.name} cast heal and restores ${heal} HP!`;
+        let message = `${player.name} cast Heal and restores ${heal} HP!`;
         const entry = document.createElement("div");
         entry.textContent = message;
         battleLog.appendChild(entry)
@@ -297,7 +291,7 @@ function DOTdamageBurn() {
 
 }
 // ! goblin special attack
-function golbinSpecial() {
+function goblinSpecial() {
     // let baseDamage = 20
     let damage = goblin.dmg
     let isCrit = Math.random() < .25;
@@ -313,13 +307,13 @@ function golbinSpecial() {
     if (playerBlock) {
         message = `${player.name} blocks and ${currentMonster.name} ingores it and bites and deals ${damage}`
     }
+    const entry = document.createElement("div");
+    entry.textContent = message;
+    document.getElementById("enemyHP").textContent = `${currentMonster.name}'s HP ${currentMonster.hp}`;
+    battleLog.appendChild(entry);
     player.hp -= damage;
     if (player.hp < 0) player.hp = 0;
     playerBlock = false
-    const entry = document.createElement("div");
-    entry.textContent = message;
-    document.getElementById("playerHP").textContent = `❤️: ${player.hp}`;
-    battleLog.appendChild(entry);
 
 }
 // ! enemy attack
@@ -361,8 +355,8 @@ function enemyTurn() {
     if (currentMonster.name === "Goblin") {
         let attackRoll = Math.random() < .25;
         if (attackRoll) {
-            golbinSpecial()
-        } else {
+            goblinSpecial()
+        } else if(!attackRoll){
             enemyAutoAttack()
         }
     } else if (currentMonster.name === "Water Serpent") {
@@ -377,6 +371,8 @@ function enemyTurn() {
             enemyAutoAttack();
         }
     }
+    console.log('enemyTurn');
+    
     if (player.name === "Mage") {
         if (burnCheck) {
             DOTdamageBurn()
